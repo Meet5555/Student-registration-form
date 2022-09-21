@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <script src="https://kit.fontawesome.com/28575cf790.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: monospace;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("back.webp");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .form {
+            /* background-color: black; */
+            flex-basis: 40%;
+            min-height: 50%;
+            padding: 2%;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .form h1 {
+            text-align: center;
+            font-family: poppins;
+            color: white;
+        }
+
+        .form-group {
+            width: 90%;
+            margin: 20px auto 0;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .inside label {
+            height: 100%;
+            position: absolute;
+            left: 0;
+            transition: 0.5s;
+            top: -15px;
+            font-size: 16px;
+        }
+
+        label {
+            color: #999;
+            font-size: 18px;
+        }
+
+        input,
+        textarea {
+            padding: 5px;
+            width: 100%;
+            padding-left: 0;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #fff;
+            outline: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.245);
+            font-size: 14px;
+        }
+
+        #gender {
+            margin: 30px 0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            /* justify-content:space-around; */
+        }
+
+        #gender label {
+            cursor: pointer;
+        }
+
+        #gender label:nth-child(1) {
+            margin-right: 5%;
+        }
+
+        #gender input {
+            cursor: pointer;
+            width: 15px;
+            margin: 0px 20px 0px 5px;
+        }
+
+        #course {
+            background: transparent;
+            border: 1px solid white;
+            width: 20em;
+            text-align: center;
+            color: white;
+            padding: 3px;
+            outline: none;
+        }
+
+        #course option {
+            color: #999;
+        }
+
+        .btn-group {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            justify-content: space-between;
+        }
+
+        .btn-group span {
+            position: absolute;
+            color: red;
+            font-family: poppins;
+            font-size: 14px;
+            top: 120%;
+            left: 5px;
+        }
+
+        .btn-group button {
+            flex-basis: 48%;
+            padding: 5px 15px;
+            background: transparent;
+            border: 2px solid white;
+            cursor: pointer;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .btn-group button:hover {
+            background: white;
+            color: black;
+            font-weight: 900;
+        }
+
+        .input-group span {
+            position: absolute;
+            right: 5px;
+            bottom: 4px;
+            color: red;
+            font-size: 14px;
+            font-family: poppins;
+        }
+
+        .fas {
+            color: lime;
+            font-size: 15px;
+        }
+
+        .popup {
+            width: 50%;
+            background: #fff;
+            border-radius: 6px;
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translate(-50%) scale(0.1);
+            z-index: 10;
+            text-align: center;
+            padding: 0 25px 25px;
+            color: #333;
+            transition: 0.5s;
+        }
+
+        .popup img {
+            width: 4vw;
+            margin-top: -2vw;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup h1 {
+            font-size: 2.5rem;
+            color: #333;
+            font-family: poppins;
+            margin: 20px 0 10px;
+        }
+
+        .popup p {
+            font-family: poppins;
+            font-size: 12px;
+        }
+
+        .popup button {
+            width: 90%;
+            margin: 25px 0 0;
+            padding: 8px 0;
+            background-color: #6fd649;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 1.3rem;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .open-popup {
+            top: 0;
+            transform: translate(-50%) scale(1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="form">
+            <div class="popup" id="popup">
+                <img src="tick.png" alt="">
+                <h1>Thank You!</h1>
+                <p>Your details has been<br> succesfully submitted.</p>
+                <button type="submit" onclick="closePopup()">OK</button>
+            </div>
+            <h1>Student Registration Form</h1>
+            <div class="form-group">
+
+                <div class="input-group inside">
+                    <input type="text" id="fname" onkeyup="validatefName()" placeholder="xyz">
+                    <label for="fname">First Name</label>
+                    <span id="fname-error"></span>
+                </div>
+                <div class="input-group inside">
+                    <input type="text" id="lname" onkeyup="validatelName()" placeholder="xyz">
+                    <label for="lame">Last Name</label>
+                    <span id="lname-error"></span>
+                </div>
+                <div class="input-group inside">
+                    <input type="text" id="phone" onkeyup="validatePhone()" placeholder="0123456789">
+                    <label for="number">Phone No.</label>
+                    <span id="phone-error"></span>
+                </div>
+                <div class="input-group inside">
+                    <input type="text" id="email" onkeyup="validateEmail()" placeholder="xyz@gmail.com">
+                    <label for="email">Email Address</label>
+                    <span id="email-error"></span>
+                </div>
+                <div class="input-group" id="gender">
+                    <label for="gender">Gender:</label>
+                    <label for="male">Male</label><input type="radio" name="gender" id="male" value="male" checked>
+                    <label for="female">Female</label><input type="radio" name="gender" id="female" value="female">
+                    <label for="other">Other</label><input type="radio" name="gender" id="other" value="other">
+                </div>
+                <div class="input-group">
+                    <label for="address">Your Address:</label>
+                    <textarea name="address" id="address" rows="3" onkeyup="validateAddress()"
+                        style="resize: none;"></textarea>
+                    <span id="address-error"></span>
+                </div>
+                <div class="input-group">
+                    <label for="course">Course:</label>
+                    <select name="course" id="course">
+                        <option value="BTech" selected>BTech</option>
+                        <option value="MTech">MTech</option>
+                        <option value="MBBS">MBBS</option>
+                        <option value="BSC">BSC</option>
+                        <option value="MSC">MSC</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button type="button" id="btn" onclick="return validateForm()">SUBMIT</button>
+                    <button type="reset" id="btn">RESET</button>
+                    <span id="submit-error"></span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let fnameError = document.getElementById("fname-error");
+        let lnameError = document.getElementById("lname-error");
+        let phoneError = document.getElementById("phone-error");
+        let emailError = document.getElementById("email-error");
+        let addressError = document.getElementById("address-error");
+        let submitError = document.getElementById("submit-error");
+
+        function validatefName() {
+            let fname = document.getElementById("fname").value;
+
+            if (fname.length == 0) {
+                fnameError.innerHTML = 'First name is required';
+                return false;
+            }
+            if (!fname.match(/^[a-zA-Z]{2,12}$/)) {
+                fnameError.innerHTML = 'Enter correct name';
+                return false;
+            }
+            fnameError.innerHTML = '<i class="fas fa-check-circle"></i>';
+            return true;
+        }
+
+        function validatelName() {
+            let lname = document.getElementById("lname").value;
+
+            if (lname.length == 0) {
+                lnameError.innerHTML = 'Last name is required';
+                return false;
+            }
+            if (!lname.match(/^[a-zA-Z]{2,12}$/)) {
+                lnameError.innerHTML = 'Enter correct name';
+                return false;
+            }
+            lnameError.innerHTML = '<i class="fas fa-check-circle"></i>';
+            return true;
+        }
+
+        function validatePhone() {
+            let phone = document.getElementById("phone").value;
+
+            if (phone.length == 0) {
+                phoneError.innerHTML = 'Phone is required';
+                return false;
+            }
+            if (phone.length != 10) {
+                phoneError.innerHTML = 'Phone should be 10 digits';
+                return false;
+            }
+            if (!phone.match(/^[0-9]{10}$/)) {
+                phoneError.innerHTML = 'Only digits please';
+                return false;
+            }
+            phoneError.innerHTML = '<i class="fas fa-check-circle"></i>';
+            return true;
+        }
+
+        function validateEmail() {
+            let email = document.getElementById("email").value;
+
+            if (email.length == 0) {
+                emailError.innerHTML = 'Email is required';
+                return false;
+            }
+
+            if (!email.match(/^[a-zA-Z\._\-0-9]*[@][a-zA-Z]*[\.][a-zA-Z]{2,4}$/)) {
+                emailError.innerHTML = 'enter valid Email';
+                return false;
+            }
+
+            emailError.innerHTML = '<i class="fas fa-check-circle"></i>';
+            return true;
+        }
+
+        function validateAddress() {
+            let address = document.getElementById("address").value;
+
+            if (address.length == 0) {
+                addressError.innerHTML = 'Address is required';
+                return false;
+            }
+            let required = 30;
+            let left = required - address.length;
+
+            if (left > 0) {
+                addressError.innerHTML = left + ' more charactes required'
+                return false;
+            }
+            addressError.innerHTML = '<i class="fas fa-check-circle"></i>';
+            return true;
+        }
+
+        function validateForm() {
+            if (!validatefName() || !validatelName() || !validatePhone() || !validateEmail() || !validateAddress()) {
+                submitError.innerHTML = 'Please fill and correct all field to submit the form';
+                setTimeout(() => {
+                    submitError.style.display = 'none';
+                }, 4000);
+                return false;
+            }
+            let popup = document.getElementById("popup");
+            popup.classList.add("open-popup");
+        }
+
+        function closePopup() {
+            let popup = document.getElementById("popup");
+            popup.classList.remove("open-popup");
+        }
+
+
+    </script>
+</body>
+
+</html>
